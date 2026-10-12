@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inscription — GPTB</title>
+  <meta name="theme-color" content="#0f3d2e">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,700&family=Outfit:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --green:#0f3d2e; --paper:#f4efe4; --muted:#6b6358; }
+    * { box-sizing:border-box; }
+    body { margin:0; font-family:Outfit,system-ui,sans-serif; background:var(--paper); color:#1a1714; }
+    header { background:linear-gradient(160deg,#0c3226,#1b5e45); color:#fff; padding:22px 18px 40px; }
+    .inner { width:min(720px, calc(100% - 8px)); margin:0 auto; }
+    .k { display:inline-block; background:rgba(212,160,23,.2); color:#f3e2a8; font-size:.75rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase; padding:5px 10px; border-radius:999px; margin-bottom:10px; }
+    h1 { font-family:Fraunces,Georgia,serif; margin:0; font-size:clamp(1.6rem,4vw,2.2rem); }
+    header p { opacity:.9; max-width:46ch; }
+    main { width:min(640px, calc(100% - 24px)); margin:-28px auto 48px; }
+    .card { background:#fffdf8; border-radius:22px; padding:24px 20px; box-shadow:0 18px 50px rgba(28,22,12,.1); }
+    h2 { font-family:Fraunces,Georgia,serif; margin:0 0 6px; }
+    .lede { color:var(--muted); margin:0 0 18px; }
+    label { display:block; font-weight:600; font-size:.92rem; margin:0 0 6px; }
+    .req { color:#b42318; }
+    input { width:100%; border:1.5px solid #e6dfd2; border-radius:14px; padding:12px 14px; font:inherit; }
+    .row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .field { margin-bottom:14px; }
+    .grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .st { border:1.5px solid #e6dfd2; background:#fff; border-radius:16px; padding:14px 10px; font:inherit; font-weight:700; cursor:pointer; }
+    .st small { display:block; font-weight:500; color:var(--muted); }
+    .on-a { background:#eff6ff; border-color:#1d4ed8; color:#1e3a8a; }
+    .on-n { background:#ecfdf3; border-color:#0f7a4a; color:#065f38; }
+    .btn { width:100%; border:0; border-radius:14px; padding:14px; font:inherit; font-weight:700; background:var(--green); color:#fff; cursor:pointer; }
+    .btn:disabled { opacity:.65; }
+    .errors { background:#fef2f2; color:#9b1c1c; border:1px solid #fecaca; border-radius:14px; padding:12px; margin-bottom:12px; }
+    .hidden { display:none !important; }
+    .ok { text-align:center; }
+    .check { width:72px; height:72px; margin:0 auto 12px; border-radius:50%; background:#ecfdf3; color:#0f7a4a; display:grid; place-items:center; font-size:2rem; }
+    .badge { display:inline-block; padding:5px 10px; border-radius:999px; font-weight:700; margin:8px 0; }
+    .nouveau { background:#d1fae5; color:#065f38; }
+    .ancien { background:#dbeafe; color:#1e3a8a; }
+    footer { text-align:center; color:var(--muted); font-size:.82rem; padding-bottom:32px; }
+    footer a { color:var(--green); font-weight:700; text-decoration:none; }
+    @media (max-width:560px){ .row,.grid { grid-template-columns:1fr; } }
+  </style>
+</head>
+<body>
+  <form name="inscription-gptb" method="POST" data-netlify="true" netlify-honeypot="bot-field" hidden>
+    <input type="hidden" name="form-name" value="inscription-gptb">
+    <input name="bot-field">
+    <input name="nom">
+    <input name="prenom">
+    <input name="date_naissance">
+    <input name="lieu_naissance">
+    <input name="telephone">
+    <input name="statut">
+    <input name="matricule">
+  </form>
+
+  <header>
+    <div class="inner">
+      <div class="k">Site d’inscription · hébergé sur Netlify</div>
+      <h1>GPTB</h1>
+      <p>Génie Physique et Technologie Biomédicale — remplissez la fiche une seule fois.</p>
+    </div>
+  </header>
+  <main>
+    <div class="card" id="form-card">
+      <h2>Vos informations</h2>
+      <p class="lede">Le même nom et prénom ne doivent pas être envoyés deux fois.</p>
+      <div id="errors" class="errors hidden"></div>
+      <form id="f">
+        <div class="row">
+          <div class="field"><label>Nom <span class="req">*</span></label><input name="last_name" required minlength="2"></div>
+          <div class="field"><label>Prénom <span class="req">*</span></label><input name="first_name" required minlength="2"></div>
+        </div>
+        <div class="row">
+          <div class="field"><label>Date de naissance <span class="req">*</span></label><input name="birth_date" type="date" required></div>
+          <div class="field"><label>Lieu de naissance <span class="req">*</span></label><input name="birth_place" required minlength="2"></div>
+        </div>
+        <div class="field"><label>Téléphone <span class="req">*</span></label><input name="phone" type="tel" required placeholder="6 77 12 34 56"></div>
+        <div class="field">
+          <label>Vous êtes <span class="req">*</span></label>
+          <div class="grid">
+            <button type="button" class="st" id="b-a">🎓 Ancien étudiant<small>J’ai un matricule</small></button>
+            <button type="button" class="st" id="b-n">✨ Nouveau étudiant<small>Pas de matricule</small></button>
+          </div>
+        </div>
+        <div class="field hidden" id="mat-f"><label>Matricule <span class="req">*</span></label><input name="matricule"></div>
+        <button class="btn" id="go" type="submit">Envoyer mon inscription</button>
+      </form>
+    </div>
+    <div class="card hidden" id="ok-card">
+      <div class="ok">
+        <div class="check">✓</div>
+        <h2>Inscription enregistrée</h2>
+        <p class="lede" id="ok-n"></p>
+        <div id="ok-b" class="badge nouveau"></div>
+        <p class="lede">Vous pouvez fermer cette page.</p>
+      </div>
+    </div>
+  </main>
+  <footer>GPTB · <a href="/admin.html">Espace enseignant</a></footer>
+  <script>
+    let type = "";
+    const ba = document.getElementById("b-a");
+    const bn = document.getElementById("b-n");
+    const mat = document.getElementById("mat-f");
+    const err = document.getElementById("errors");
+    ba.onclick = () => { type="ancien"; ba.className="st on-a"; bn.className="st"; mat.classList.remove("hidden"); };
+    bn.onclick = () => { type="nouveau"; bn.className="st on-n"; ba.className="st"; mat.classList.add("hidden"); document.querySelector("[name=matricule]").value=""; };
+    function showErr(list) {
+      err.classList.remove("hidden");
+      err.innerHTML = "<ul>" + list.map(e => "<li>"+e+"</li>").join("") + "</ul>";
+    }
+    function phoneOk(raw) {
+      let d = String(raw||"").replace(/\D/g,"");
+      if (d.startsWith("237") && d.length===12) d = d.slice(3);
+      return d.length===9 && d[0]==="6";
+    }
+    document.getElementById("f").onsubmit = async (e) => {
+      e.preventDefault();
+      err.classList.add("hidden");
+      const f = e.target;
+      const last = f.last_name.value.trim();
+      const first = f.first_name.value.trim();
+      const errors = [];
+      if (last.length<2) errors.push("Indiquez votre nom.");
+      if (first.length<2) errors.push("Indiquez votre prénom.");
+      if (!f.birth_date.value) errors.push("Indiquez votre date de naissance.");
+      if (f.birth_place.value.trim().length<2) errors.push("Indiquez votre lieu de naissance.");
+      if (!phoneOk(f.phone.value)) errors.push("Numéro camerounais invalide (9 chiffres, commence par 6).");
+      if (!type) errors.push("Cochez Ancien ou Nouveau étudiant.");
+      if (type==="ancien" && f.matricule.value.trim().length<2) errors.push("Les anciens étudiants doivent indiquer leur matricule.");
+      if (errors.length) { showErr(errors); return; }
+      const key = (last+"|"+first).toLowerCase();
+      const used = JSON.parse(localStorage.getItem("gptb_names")||"[]");
+      if (used.includes(key)) { showErr([first+" "+last+" est déjà inscrit(e) sur cet appareil."]); return; }
+      const go = document.getElementById("go");
+      go.disabled = true; go.textContent = "Envoi en cours…";
+      const statut = type==="ancien" ? "Ancien étudiant" : "Nouveau étudiant";
+      const body = new URLSearchParams({
+        "form-name": "inscription-gptb",
+        nom: last, prenom: first,
+        date_naissance: f.birth_date.value,
+        lieu_naissance: f.birth_place.value.trim(),
+        telephone: f.phone.value.trim(),
+        statut, matricule: type==="ancien" ? f.matricule.value.trim() : ""
+      });
+      try {
+        const res = await fetch("/", { method:"POST", headers:{ "Content-Type":"application/x-www-form-urlencoded" }, body: body.toString() });
+        if (!res.ok) throw new Error("netlify");
+        used.push(key); localStorage.setItem("gptb_names", JSON.stringify(used));
+        document.getElementById("form-card").classList.add("hidden");
+        document.getElementById("ok-card").classList.remove("hidden");
+        document.getElementById("ok-n").textContent = first + " " + last;
+        const b = document.getElementById("ok-b");
+        b.textContent = statut; b.className = "badge " + type;
+      } catch (ex) {
+        showErr(["Envoi impossible. Vérifiez le réseau et réessayez."]);
+        go.disabled = false; go.textContent = "Envoyer mon inscription";
+      }
+    };
+  </script>
+</body>
+</html>
